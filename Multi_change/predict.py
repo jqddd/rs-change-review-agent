@@ -56,7 +56,7 @@ class Change_Perception(object):
 
         parser.add_argument('--data_folder', default='D:\Dataset\Caption\change_caption\Levir-MCI-dataset\images',
                             help='folder with data files')
-        parser.add_argument('--list_path', default='F:\LCY\Change_Agent\Change-Agent-git\Multi_change\data\LEVIR_MCI/',
+        parser.add_argument('--list_path', default='./data/LEVIR_MCI/',
                             help='path of the data lists')
         parser.add_argument('--vocab_file', default='vocab', help='path of the data lists')
         parser.add_argument('--max_length', type=int, default=41, help='path of the data lists')
@@ -81,7 +81,7 @@ class Change_Perception(object):
         parser.add_argument('--decoder_n_layers', type=int, default=1)
         parser.add_argument('--feature_dim', type=int, default=512, help='embedding dimension')
 
-        args = parser.parse_args()
+        args, _ = parser.parse_known_args()
 
         return args
 
