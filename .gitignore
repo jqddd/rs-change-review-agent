@@ -11,13 +11,16 @@ venv/
 
 # 模型权重与数据集（大文件，不提交；已有的第三方小权重除外）
 *.pth
+*.pt
 *.ckpt
 *.zip
 models_ckpt/
+**/checkpoints/
 
-# IDE
+# IDE / 系统文件
 .idea/
 .vscode/
+.DS_Store
 
 # 临时输出
 tmp_dir/
