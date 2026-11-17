@@ -56,14 +56,16 @@ class Change_Perception(object):
 
         parser.add_argument('--data_folder', default='D:\Dataset\Caption\change_caption\Levir-MCI-dataset\images',
                             help='folder with data files')
-        parser.add_argument('--list_path', default='F:\LCY\Change_Agent\Change-Agent-git\Multi_change\data\LEVIR_MCI/',
+        # 复现改动#1：原默认值是作者本机硬编码路径 F:\LCY\...，改为基于本文件位置计算，保证可移植
+        parser.add_argument('--list_path', default=os.path.join(script_dir, 'data', 'LEVIR_MCI') + os.sep,
                             help='path of the data lists')
         parser.add_argument('--vocab_file', default='vocab', help='path of the data lists')
         parser.add_argument('--max_length', type=int, default=41, help='path of the data lists')
 
         # inference
         parser.add_argument('--gpu_id', type=int, default=0, help='gpu id in the training.')
-        parser.add_argument('--checkpoint', default='./models_ckpt/MCI_model.pth',help='path to checkpoint')
+        # 复现改动#2：checkpoint 改为基于本文件位置（原 './models_ckpt/MCI_model.pth' 依赖运行目录，换个目录就找不到）
+        parser.add_argument('--checkpoint', default=os.path.join(script_dir, 'models_ckpt', 'MCI_model.pth'), help='path to checkpoint')
         parser.add_argument('--result_path', default="./predict_result/",
                             help='path to save the result of masks and captions')
 
@@ -81,7 +83,8 @@ class Change_Perception(object):
         parser.add_argument('--decoder_n_layers', type=int, default=1)
         parser.add_argument('--feature_dim', type=int, default=512, help='embedding dimension')
 
-        args = parser.parse_args()
+        # 复现改动#3：用 parse_known_args 忽略调用方脚本自带的其它参数（如 --imgA/--imgB），避免 argparse 冲突
+        args = parser.parse_known_args()[0]
 
         return args
 

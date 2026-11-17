@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# 环境 / 密钥
+.env
+.venv/
+venv/
+
+# 模型权重与数据集（大文件，不提交；已有的第三方小权重除外）
+*.pth
+*.ckpt
+*.zip
+models_ckpt/
+
+# IDE
+.idea/
+.vscode/
+
+# 临时输出
+tmp_dir/
+predict_result/
+samples_*/predict*/
+*.log
