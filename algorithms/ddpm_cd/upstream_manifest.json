@@ -1,0 +1,51 @@
+{
+  "repository": "https://github.com/wgcban/ddpm-cd",
+  "commit": "4970792f65227958ffaa1de787649ce2c5839f12",
+  "license": "MIT",
+  "files": [
+    {
+      "upstream_path": "model/sr3_modules/diffusion.py",
+      "local_path": "models/sr3_modules/diffusion.py",
+      "upstream_blob_sha": "e62f18b1ccc277f79b97c2b728c9e2f80b25c677",
+      "modifications": []
+    },
+    {
+      "upstream_path": "model/sr3_modules/unet.py",
+      "local_path": "models/sr3_modules/unet.py",
+      "upstream_blob_sha": "7871fb5122c133968ec5135708c00ad4846eb296",
+      "modifications": []
+    },
+    {
+      "upstream_path": "model/cd_modules/cd_head_v2.py",
+      "local_path": "models/cd_modules/cd_head_v2.py",
+      "upstream_blob_sha": "f2244cbd186b9c0e46023a52c4f82600d697af84",
+      "modifications": [
+        "Changed two model.cd_modules imports to relative imports; no network/forward changes."
+      ]
+    },
+    {
+      "upstream_path": "model/cd_modules/psp.py",
+      "local_path": "models/cd_modules/psp.py",
+      "upstream_blob_sha": "d5424fb0809bf0884b7c81333f5043c97845c683",
+      "modifications": []
+    },
+    {
+      "upstream_path": "model/cd_modules/se.py",
+      "local_path": "models/cd_modules/se.py",
+      "upstream_blob_sha": "b485689fccff494c33b9c954271ae06b86b2c0e4",
+      "modifications": []
+    },
+    {
+      "upstream_path": "config/levir_test.json",
+      "local_path": "config/levir_test.upstream.jsonc",
+      "upstream_blob_sha": "908bc5f2144e9aba750dbee868ad950a2c0a37af",
+      "modifications": []
+    },
+    {
+      "upstream_path": "LICENSE",
+      "local_path": "LICENSE",
+      "upstream_blob_sha": "8e3f34192b2d9cae22daf6209d5fceaa879d01c9",
+      "modifications": []
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "profile": "levir_50_100_400",
+  "trained_on": "LEVIR-CD",
+  "target_object": "building",
+  "image_size": 256,
+  "timesteps": [50, 100, 400],
+  "feature_type": "decoder",
+  "feature_scales": [2, 5, 8, 11, 14],
+  "unet": {
+    "in_channel": 3,
+    "out_channel": 3,
+    "inner_channel": 128,
+    "norm_groups": 32,
+    "channel_mults": [1, 2, 4, 8, 8],
+    "attn_res": [16],
+    "res_blocks": 2,
+    "dropout": 0.2,
+    "image_size": 256
+  },
+  "noise_schedule": {
+    "schedule": "linear",
+    "n_timestep": 2000,
+    "linear_start": 0.000001,
+    "linear_end": 0.01
+  },
+  "diffusion_file": "diffusion-model-I190000_E97_gen.pth",
+  "diffusion_bytes": 1564451029,
+  "change_file": "cd-levir-50-100-400-best_cd_model_gen.pth",
+  "change_bytes": 185642343
+}
