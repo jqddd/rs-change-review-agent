@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-11-22",
+  "implementation": "models/opencd_c16.py",
+  "upstream": {
+    "repository": "https://github.com/likyoo/open-cd",
+    "license": "Apache-2.0",
+    "license_file": "LICENSE.opencd",
+    "license_url": "https://github.com/likyoo/open-cd/blob/790a1972b538baaaffd4c3022a4d9afaa3f861e5/LICENSE",
+    "copyright_notice": "Copyright [2022] [The Open-CD Authors.]",
+    "commit": "790a1972b538baaaffd4c3022a4d9afaa3f861e5",
+    "revision_note": "The repository main revision was resolved through the GitHub commit API. The downloaded backbone is additionally pinned by its exact SHA256 and Git blob ID below. This source revision is not a claim about the code revision used to train the checkpoint.",
+    "backbone": {
+      "path": "opencd/models/backbones/snunet.py",
+      "download_url": "https://raw.githubusercontent.com/likyoo/open-cd/790a1972b538baaaffd4c3022a4d9afaa3f861e5/opencd/models/backbones/snunet.py",
+      "git_blob_sha1": "1d673ac65c6f0dc61e229290c3dbd8ad922ce554",
+      "git_blob_api_url": "https://api.github.com/repos/likyoo/open-cd/git/blobs/1d673ac65c6f0dc61e229290c3dbd8ad922ce554",
+      "sha256": "2d5f493ae923a138e49433a5255f30704f80a0e3e5a756c7d5628ce253c6d7ae",
+      "size_bytes": 6321,
+      "line_endings": "LF",
+      "paper": "S. Fang, K. Li, J. Shao, and Z. Li, SNUNet-CD: A Densely Connected Siamese Network for Change Detection of VHR Images, IEEE Geoscience and Remote Sensing Letters, 2021, doi:10.1109/LGRS.2021.3056416"
+    },
+    "reference_configs": [
+      "https://github.com/likyoo/open-cd/blob/790a1972b538baaaffd4c3022a4d9afaa3f861e5/configs/_base_/models/snunet_c16.py",
+      "https://github.com/likyoo/open-cd/blob/790a1972b538baaaffd4c3022a4d9afaa3f861e5/configs/snunet/snunet_c16_256x256_40k_levircd.py",
+      "https://github.com/likyoo/open-cd/blob/790a1972b538baaaffd4c3022a4d9afaa3f861e5/configs/common/standard_256x256_40k_levircd.py"
+    ]
+  },
+  "checkpoint": {
+    "repository": "https://huggingface.co/likyoo/Open-CD_Model_Zoo",
+    "revision": "07de9dd7027827cb47bdbe9bcece7ff9b8da73ad",
+    "path": "LEVIR-CD/snunet_c16_256x256_40k_levircd.pth",
+    "url": "https://huggingface.co/likyoo/Open-CD_Model_Zoo/resolve/07de9dd7027827cb47bdbe9bcece7ff9b8da73ad/LEVIR-CD/snunet_c16_256x256_40k_levircd.pth",
+    "sha256": "984bfd07e0a30bbea5cd5a2fec918c994208c63b6c69e67a6592e06871811572",
+    "size_bytes": 40792765,
+    "git_lfs_pointer_blob_sha1": "a0b94000a8a0b7c99dd06ccd9dbc140cb4514dd7",
+    "experiment_name": "snunet_c16_256x256_40k_levircd_20240704_225510",
+    "saved_at": "20240705_010024",
+    "iteration": 40000,
+    "source_code_revision": null,
+    "version_note": "The embedded cfg is an MMEngine/OpenMMLab 2.0 configuration consistent with Open-CD 1.x. Plain checkpoint metadata does not identify the exact Open-CD or MMSegmentation revision. Inference settings below are verified against that embedded cfg, not inferred from the filename.",
+    "converted_path": "checkpoints/snunet_levir_c16.pth",
+    "converter": "convert_opencd_checkpoint.py",
+    "converted_tensor_count": 236,
+    "converted_tensor_elements": 3015856,
+    "state_dict": {
+      "backbone_tensor_count": 234,
+      "head_keys": {
+        "decode_head.conv_seg.weight": [2, 64, 1, 1],
+        "decode_head.conv_seg.bias": [2]
+      },
+      "data_preprocessor_buffers": false,
+      "loading": "Strict loading of the complete mapping; no renamed, ignored, or missing network tensors."
+    },
+    "embedded_config": "Stored verbatim as upstream_config in the converted checkpoint; never executed."
+  },
+  "inference_configuration": {
+    "backbone": {
+      "type": "SNUNet_ECAM",
+      "in_channels": 3,
+      "base_channel": 16,
+      "output_channels": 64,
+      "normalization": "torch.nn.BatchNorm2d, eps=1e-5, momentum=0.1; the backbone does not consume the config's top-level SyncBN setting",
+      "encoder_pool": "MaxPool2d(kernel_size=2, stride=2)",
+      "attention_avg_pool": "AdaptiveAvgPool2d(1)",
+      "attention_max_pool": "AdaptiveMaxPool2d(1)",
+      "upsampling": "ConvTranspose2d(kernel_size=2, stride=2), bilinear=False; the unused bilinear branch specifies align_corners=True"
+    },
+    "decode_head": {
+      "type": "mmseg.FCNHead",
+      "in_channels": 64,
+      "channels": 64,
+      "in_index": -1,
+      "num_convs": 0,
+      "concat_input": false,
+      "num_classes": 2,
+      "dropout_ratio": 0.1,
+      "inference_behavior": "Identity feature transform, Dropout2d(0.1) disabled by eval(), then Conv2d(64, 2, 1). No head batch normalization is instantiated."
+    },
+    "preprocessing": {
+      "input": "RGB float32 in the original 0-255 value range before normalization",
+      "mean": [123.675, 116.28, 103.53],
+      "std": [58.395, 57.12, 57.375],
+      "upstream_bgr_to_rgb": true,
+      "deployment_rgb_note": "The deployment decoder already supplies RGB, so it applies mean/std without reversing channels again.",
+      "upstream_size_divisor": 32,
+      "upstream_pad_val": 0,
+      "upstream_seg_pad_val": 255
+    },
+    "classes": ["unchanged", "changed"],
+    "prediction": "argmax over two logits; class 1 means changed",
+    "upstream_test": {
+      "mode": "whole",
+      "resize_scale": [1024, 1024],
+      "keep_ratio": true,
+      "training_crop_size": [256, 256]
+    },
+    "deployment": {
+      "tile_size": [256, 256],
+      "resize": false,
+      "note": "Native 256x256 inference is a deployment adaptation. Tiles are not enlarged to 1024x1024. Official whole-image LEVIR-CD test scores are not reproduced or implied by this adaptation."
+    }
+  },
+  "local_adaptations": [
+    "Normalize trailing whitespace and the final newline in the vendored module; numerical code is unchanged.",
+    "Remove the Open-CD registry import/decorator and the global torch.nn.Module.dump_patches assignment so the network runs with plain PyTorch without changing global serialization settings. These edits do not change numerical operations.",
+    "Expose the official C16 backbone under backbone and the minimal num_convs=0 FCN classifier under decode_head, preserving checkpoint key names.",
+    "Return N x 2 x H x W logits from forward(image_a, image_b); preprocessing and final argmax belong to the deployment inference layer.",
+    "Do not apply the legacy CDD C32 checkpoint's historical attention-pooling configuration to this independent Open-CD profile.",
+    "Retain the existing torch/MMCV/MMSegmentation environment without requiring Open-CD, MMEngine, or a dependency upgrade."
+  ]
+}
