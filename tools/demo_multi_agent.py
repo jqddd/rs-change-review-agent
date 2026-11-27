@@ -28,8 +28,17 @@ from changeformer_tool import ChangeFormerTool  # noqa: E402
 from ddpm_cd_tool import DDPMCDTool  # noqa: E402
 from snunet_tool import SNUNetTool  # noqa: E402
 from tinycd_tool import TinyCDTool  # noqa: E402
+from tools.image_quality_tool import ImageQualityCheckTool
+from tools.preprocess_tool import DenoiseTool, HistogramMatchTool, DeblurTool
 
 TOOL_NAMES = {"changeformer", "bit", "tinycd", "snunet", "ddpm_cd"}
+
+
+def make_executor() -> ActionExecutor:
+    return ActionExecutor(actions=[
+        ChangeFormerTool(), BITTool(), TinyCDTool(), SNUNetTool(), DDPMCDTool(),
+        ImageQualityCheckTool(), DenoiseTool(), HistogramMatchTool(), DeblurTool(),
+    ])
 
 
 def build_agent() -> ReAct:
@@ -41,18 +50,15 @@ def build_agent() -> ReAct:
         key=api_key,
         openai_api_base=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/chat/completions"),
     )
-    tools = [ChangeFormerTool(), BITTool(), TinyCDTool(), SNUNetTool(), DDPMCDTool()]
-    return ReAct(llm=llm, action_executor=ActionExecutor(actions=tools))
+    return ReAct(llm=llm, action_executor=make_executor())
 
 
 def run_turn(chatbot: ReAct, history: list) -> str:
     """跑一轮，打印工具调用情况，返回最终回答。"""
     result = chatbot.chat(history)
-    tool_calls = [a for a in result.actions if a.type in TOOL_NAMES]
-    if tool_calls:
-        for a in tool_calls:
-            print(f"    [工具调用] {a.type} -> {a.state}")
-    else:
+    for a in result.actions:
+        print(f"    [工具调用] {a.type} -> {a.state}")
+    if not any(a.type in TOOL_NAMES for a in result.actions):
         print("    [警告] 未调用任何变化检测工具（可能是幻觉）")
     return result.response
 
