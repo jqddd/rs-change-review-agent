@@ -11,9 +11,11 @@ venv/
 
 # 模型权重与数据集（大文件，不提交；已有的第三方小权重除外）
 *.pth
+*.pt
 *.ckpt
 *.zip
 models_ckpt/
+**/checkpoints/
 
 # IDE
 .idea/
