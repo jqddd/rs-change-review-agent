@@ -402,8 +402,8 @@ class AttentiveEncoder(nn.Module):
 
     def add_pos_embedding(self, x):
         batch, c, h, w = x.shape
-        pos_h = torch.arange(h).cuda()
-        pos_w = torch.arange(w).cuda()
+        pos_h = torch.arange(h, device=x.device)
+        pos_w = torch.arange(w, device=x.device)
         embed_h = self.w_embedding(pos_h)
         embed_w = self.h_embedding(pos_w)
         pos_embedding = torch.cat([embed_w.unsqueeze(0).repeat(h, 1, 1),
@@ -415,8 +415,8 @@ class AttentiveEncoder(nn.Module):
 
     def add_pos_embedding_CD(self, x):
         batch, c, h, w = x.shape
-        pos_h = torch.arange(h).cuda()
-        pos_w = torch.arange(w).cuda()
+        pos_h = torch.arange(h, device=x.device)
+        pos_w = torch.arange(w, device=x.device)
         embed_h = self.w_embedding_CD(pos_h)
         embed_w = self.h_embedding_CD(pos_w)
         pos_embedding = torch.cat([embed_w.unsqueeze(0).repeat(h, 1, 1),

@@ -88,11 +88,12 @@ class Change_Perception(object):
 
         return args
 
-    def __init__(self,):
+    def __init__(self, device=None):
         """
         Training and validation.
         """
         args = self.define_args()
+        self.device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
         self.mean = [0.39073 * 255, 0.38623 * 255, 0.32989 * 255]
         self.std = [0.15329 * 255, 0.14628 * 255, 0.13648 * 255]
 
@@ -101,7 +102,7 @@ class Change_Perception(object):
         # Load checkpoint
         snapshot_full_path = args.checkpoint
 
-        checkpoint = torch.load(snapshot_full_path)
+        checkpoint = torch.load(snapshot_full_path, map_location="cpu")
         self.encoder = Encoder(args.network)
         self.encoder_trans = AttentiveEncoder(train_stage=None, n_layers=args.n_layers,
                                          feature_size=[args.feat_size, args.feat_size, args.encoder_dim],
@@ -116,11 +117,11 @@ class Change_Perception(object):
         self.decoder.load_state_dict(checkpoint['decoder_dict'])
         # Move to GPU, if available
         self.encoder.eval()
-        self.encoder = self.encoder.cuda()
+        self.encoder = self.encoder.to(self.device)
         self.encoder_trans.eval()
-        self.encoder_trans = self.encoder_trans.cuda()
+        self.encoder_trans = self.encoder_trans.to(self.device)
         self.decoder.eval()
-        self.decoder = self.decoder.cuda()
+        self.decoder = self.decoder.to(self.device)
 
 
     def preprocess(self, path_A, path_B):
@@ -153,8 +154,8 @@ class Change_Perception(object):
         print('model_infer_change_captioning: start')
         imgA, imgB = self.preprocess(path_A, path_B)
         # Move to GPU, if available
-        imgA = imgA.cuda()
-        imgB = imgB.cuda()
+        imgA = imgA.to(self.device)
+        imgB = imgB.to(self.device)
         feat1, feat2 = self.encoder(imgA, imgB)
         feat1, feat2, seg_pre = self.encoder_trans(feat1, feat2)
         seq = self.decoder.sample(feat1, feat2, k=1)
@@ -172,8 +173,8 @@ class Change_Perception(object):
         print('model_infer_change_detection: start')
         imgA, imgB = self.preprocess(path_A, path_B)
         # Move to GPU, if available
-        imgA = imgA.cuda()
-        imgB = imgB.cuda()
+        imgA = imgA.to(self.device)
+        imgB = imgB.to(self.device)
         feat1, feat2 = self.encoder(imgA, imgB)
         feat1, feat2, seg_pre = self.encoder_trans(feat1, feat2)
         # for segmentation
