@@ -269,13 +269,13 @@ class DecoderTransformer(nn.Module):
         batch, channel = x.size(0), x.size(1)
         x = x.view(batch, channel, -1).permute(2, 0, 1)#(hw, batch_size, feature_dim)
 
-        tgt = torch.zeros(batch, self.max_lengths).to(torch.int64).cuda() #(batch_size, self.max_lengths)
+        tgt = torch.zeros(batch, self.max_lengths).to(torch.int64).to(x.device) #(batch_size, self.max_lengths)
 
         mask = torch.triu(torch.ones(self.max_lengths, self.max_lengths) * float('-inf'), diagonal=1)
-        mask = mask.cuda()
-        tgt[:, 0] = torch.LongTensor([self.word_vocab['<START>']] *batch).cuda() #(batch_size, 1)
-        seqs = torch.LongTensor([[self.word_vocab['<START>']]] *batch).cuda() #(batch_size, 1)
-        #Weight = torch.zeros(1, self.max_lengths, x.size(0)).cuda()
+        mask = mask.to(x.device)
+        tgt[:, 0] = torch.LongTensor([self.word_vocab['<START>']] *batch).to(x.device) #(batch_size, 1)
+        seqs = torch.LongTensor([[self.word_vocab['<START>']]] *batch).to(x.device) #(batch_size, 1)
+        #Weight = torch.zeros(1, self.max_lengths, x.size(0)).to(x.device)
         for step in range(self.max_lengths):
             tgt_pad_mask = (tgt == self.word_vocab['<NULL>'])
             word_emb = self.vocab_embedding(tgt)
