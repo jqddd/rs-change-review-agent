@@ -1,0 +1,8 @@
+Pillow>=10
+numpy>=1.26,<2
+scikit-image>=0.23,<0.25
+rasterio==1.4.3
+affine<3
+Jinja2>=3.1,<4
+
+Shapely>=2,<3
