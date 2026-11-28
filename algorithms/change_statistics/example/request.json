@@ -1,0 +1,5 @@
+{
+  "questions": {"building": ["pixels", "regions", "roi", "area_m2"]},
+  "inputs": {"building": {"scheme": "tinycd", "mask": "mask.png", "fully_valid": true,
+    "roi": {"bbox": [2, 1, 4, 4]}}}
+}

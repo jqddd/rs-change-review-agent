@@ -1,0 +1,16 @@
+# 变化统计报告
+{% for scene, r in results.items() %}
+## {{ {"building":"建筑","forest":"森林"}.get(scene, scene) }}变化
+{% if r.status == "ok" %}
+统计来源为 {{ r.scheme }} 的 `{{ r.mask }}`。
+{% if "pixels" in r %}变化像素 {{ r.pixels.changed }}，有效像素 {{ r.pixels.valid }}，占比 {{ "%.2f%%"|format(100*r.pixels.share) }}。
+{% endif %}{% if "regions" in r %}按八邻域统计，保留至少 {{ r.regions.min_pixels }} 个像素的区域，共 {{ r.regions.count }} 片。各片像素数为 {{ r.regions.sizes }}。
+{% endif %}{% if "area_m2" in r %}{% if r.area_m2.status == "ok" %}变化面积为 {{ r.area_m2.value }} 平方米，每像素 {{ r.area_m2.pixel_area }} 平方米（{{ r.area_m2.source }}）。{% else %}缺少可靠的像素面积，平方米未知。{% endif %}
+{% endif %}{% if "description" in r %}{% if r.description.status == "ok" %}MCI 对整对原图的描述（模型预测）：{{ r.description.text }}{% else %}影像描述暂缺。{{ r.description.detail }}{% endif %}
+{% endif %}{% if "regions" in r %}{% for item in r.regions["items"] %}区域 {{ item.id }} 外接框 {{ item.bbox }}，面积 {{ item.area_pixels }} 像素。
+{% endfor %}{% endif %}{% if "roi" in r %}{% if "detail" in r.roi %}{{ r.roi.detail }}{% else %}圈选范围内共有 {{ r.roi.valid }} 个有效像素，其中 {{ r.roi.changed }} 个发生变化。{% endif %}
+{% endif %}{% if "comparison" in r %}局部对照图：{{ r.comparison.get("path", r.comparison.get("detail")) }}
+{% endif %}{% if "vectors" in r %}变化图斑：{{ r.vectors.path }}（{{ r.vectors.coordinates }}）
+{% endif %}{% if "zones" in r %}{% if r.zones is mapping %}{{ r.zones.detail }}{% else %}{% for z in r.zones %}{{ z.name }}：变化 {{ z.changed_m2 }} 平方米，有效面积 {{ z.valid_m2 }} 平方米。
+{% endfor %}{% endif %}{% endif %}{% elif r.status == "missing_mask" %}缺少该场景的检测结果。{% else %}统计未完成。{{ r.get("detail", r.status) }}{% endif %}
+{% endfor %}
